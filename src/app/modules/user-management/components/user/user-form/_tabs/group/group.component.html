@@ -1,0 +1,113 @@
+<div class="kt-form">
+  <div class="kt-form__filtration kt-margin-b-0">
+    <div class="row align-items-center">
+      <div class="col-md-2 kt-margin-bottom-10-mobile">
+        <strong>User Group</strong>
+      </div>
+      <div class="col-md-7 kt-margin-bottom-10-mobile"></div>
+      <div class="col-md-3 kt-margin-bottom-10-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <input matInput placeholder="Search..." #searchInput placeholder="Search">
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+  <div class="kt-separator kt-separator--dashed kt-margin-t-0"></div>
+
+  <div class="row mt-4">
+    <div class="col-4">
+      <form>
+        <div class="form-group row">
+          <label for="name" class="col-4 col-form-label" required>Name:</label>
+          <div class="col-7">
+            <mat-form-field class="mat-form-field-fluid">
+              <input type="text" matInput placeholder="Enter name" id="name" required>
+            </mat-form-field>
+          </div>
+          <div class="col-1 hint-tooltip">
+            <i class="fas fa-lightbulb text-warning" placement="bottom"
+              ngbTooltip="The name is how it appears on your site."></i>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="role" class="col-4 col-form-label" required>Role:</label>
+          <div class="col-7">
+            <mat-form-field class="mat-form-field-fluid">
+              <input type="text" matInput placeholder="Enter role" id="role" required>
+            </mat-form-field>
+          </div>
+          <div class="col-1 hint-tooltip">
+            <i class="fas fa-lightbulb text-warning" placement="bottom"
+              ngbTooltip="The description is not prominent by default; however, some themes may show it."></i>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="description" class="col-4 col-form-label">Description:</label>
+          <div class="col-7">
+            <mat-form-field class="mat-form-field-fluid">
+              <textarea matInput placeholder="Enter description" id="description" rows="4"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row mt-5 justify-content-md-center">
+          <button type="button" class="btn btn-primary btn-width-default">Save</button>
+          <button type="button" class="btn btn-secondary btn-width-default">Cancel</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-8">
+      <div class="row">
+        <div class="col-12">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-secondary px-5" id="dropdownBasic1" ngbDropdownToggle>Bulk Actions</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem>Archive</button>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary btn-width-default d-inline">Apply</button>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-12">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Description</th>
+                  <th scope="col">Order</th>
+                  <th scope="col">Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Super Admin</td>
+                  <td>Sample string</td>
+                  <td>1</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Admin</td>
+                  <td></td>
+                  <td>2</td>
+                  <td>0</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>User</td>
+                  <td>Sample string</td>
+                  <td>3</td>
+                  <td>0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

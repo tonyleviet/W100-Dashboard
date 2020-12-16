@@ -1,0 +1,51 @@
+<div>
+	<div class="form-group kt-form__group row" [class.actionloading]="loadingRoleList$ | async">
+		<div class="col-lg-4 kt-margin-bottom-20-mobile">
+			<mat-form-field class="mat-form-field-fluid">
+        <input type="text" placeholder="Select Role" matInput [matAutocomplete]="auto" [formControl]="myControl" #roleAutocomple>
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+          <mat-option *ngFor="let option of filteredRoles | async" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
+				<!-- <mat-select placeholder="Select Role" #roleSelect>
+          <mat-option disabled selected>None</mat-option>
+					<mat-option *ngFor="let role of unassignedRoles; let i = index" [value]="role">{{ role }}</mat-option>
+				</mat-select> -->
+				<mat-hint align="start">
+					<strong>Select Role</strong>
+				</mat-hint>
+			</mat-form-field>
+		</div>
+		<div class="col-lg-4 kt-margin-bottom-20-mobile">
+      <button type="button" mat-raised-button matTooltip="Assign role" color="primary"
+        [disabled]="!validateRoleValue(roleAutocomple.value)"
+        (click)="assignRole(roleAutocomple.value)">
+				Assign
+			</button>
+		</div>
+	</div>
+  <div class="kt-separator kt-separator--dashed"></div>
+  <div [class.actionloading]="loading$ | async">
+    <h6 class="kt-section__heading">
+      Assigned roles:
+    </h6>
+    <div class="form-group kt-form__group row">
+      <div class="col-lg-8 kt-margin-bottom-20-mobile">
+        <div class="kt-list-timeline kt-list-timeline--user-role">
+          <div class="kt-list-timeline__items">
+            <div class="kt-list-timeline__item m-0 p-0" *ngFor="let _role of assignRoles; let i = index">
+              <span class="kt-list-timeline__badge kt-list-timeline__badge--primary"></span>
+              <span class="kt-list-timeline__text">{{ _role }}</span>
+              <span class="kt-list-timeline__time">
+                <button mat-icon-button color="warn" matTooltip="Remove role" type="button" (click)="unassingRole(_role, i)">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

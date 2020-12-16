@@ -1,0 +1,280 @@
+<kt-portlet>
+  <kt-portlet-header [title]="getComponentTitle()" [class]="'kt-portlet__head--lg'">
+    <ng-container ktPortletTools>
+      <button type="button" [routerLink]="['../../']" class="btn btn-secondary kt-margin-r-10" mat-raised-button
+        matTooltip="Back to the users list" [disabled]="loading$ | async">
+        <i class="la la-arrow-left"></i>
+        <span class="kt-hidden-mobile">Back</span>
+      </button>
+      <button type="button" class="btn btn-primary kt-margin-r-10" color="primary" mat-raised-button
+        matTooltip="Update & Continue"
+        *ngIf="selectedTab === 0"
+        [disabled]="selectedTab !== 0 || isModifyUser() || !validateFormOnTab() || (loading$ | async)"
+        (click)="onSumbit()" >
+        <span class="kt-hidden-mobile">Update</span>
+      </button>
+    </ng-container>
+  </kt-portlet-header>
+
+  <kt-portlet-body>
+    <mat-tab-group #tabs animationDuration="0ms" (selectedIndexChange)="selectedIndexChange($event)">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <i class="mat-tab-label-icon fa fa-exclamation-circle"></i>
+          Profile
+        </ng-template>
+        <ng-template matTabContent>
+          <!--begin::Form-->
+          <form class="kt-form kt-form--group-seperator-dashed" [class.actionloading]="loading$ | async"
+            action="" method="post" enctype="multipart/form-data" autocomplete="off"
+            #profileForm="ngForm">
+            <div class="kt-form__section kt-form__section--first">
+              <div class="row">
+                <div class="col kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input type="text" matInput placeholder="Username" required autocomplete="username" maxlength="255"
+                      email [pattern]="adminConfig.regex.email" [disabled]="!user.ChangedUserName"
+                      name="UserName" [(ngModel)]="user.UserName" #userName="ngModel" />
+                      <mat-hint>Email</mat-hint>
+                      <mat-error *ngIf="userName.invalid && (userName.dirty || userName.touched)">
+                        <span *ngIf="userName.errors?.required">
+                          Username is <strong>required</strong>
+                        </span>
+                        <span *ngIf="userName.errors?.pattern">
+                          Username is not <strong>valid</strong>
+                        </span>
+                      </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input type="email" matInput placeholder="Email" required email maxlength="255"
+                      [pattern]="adminConfig.regex.email" [disabled]="!user.ChangedUserName ? true : null"
+                      name="Email" [(ngModel)]="user.Email" #userEmail="ngModel"/>
+                    <mat-error *ngIf="userEmail.invalid && (userEmail.dirty || userEmail.touched)">
+                      <span *ngIf="userEmail.errors?.required">
+                        Email is <strong>required</strong>
+                      </span>
+                      <span *ngIf="userEmail.errors?.pattern">
+                        Email is not <strong>valid</strong>
+                      </span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <!-- <div class="col kt-margin-bottom-20">
+                  <mat-form-field>
+                    <input matInput [matDatepicker]="picker" placeholder="Birthday"
+                      [mask]='adminConfig.mask.date' [showMaskTyped] = "true" [validation]="true" [value]="inputDate"
+                      (dateInput)="inputDateChange(birthDate.value)" (dateChange)="inputDateChange(birthDate.value)"
+                      #birthDate
+                    />
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                  <div class="mat-error" role="alert" style="position: relative; top: -15px;" *ngIf="!isValidDate">
+                    Birthday is invalidDate
+                  </div>
+                </div> -->
+                <div class="col-lg-4 kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input type="text" matInput placeholder="First name" required maxlength="50"
+                      name="firstName" [(ngModel)]="user.FirstName" #firstName="ngModel"/>
+                    <mat-error>First name is
+                      <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input type="text" matInput placeholder="Middle name" maxlength="50"
+                      name="middleName" [(ngModel)]="user.MiddleName" #middleName="ngModel"/>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input type="text" matInput placeholder="Last name" required maxlength="50"
+                      name="lastName" [(ngModel)]="user.LastName" #lastName="ngModel"/>
+                    <mat-error>Last name is
+                      <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input type="tel" matInput placeholder="Phone" required maxlength="20"
+                      [mask]='adminConfig.mask.phone' [showMaskTyped] = "true" [validation]="true"
+                      name="phone" [(ngModel)]="user.Phone" #phone="ngModel"/>
+                    <mat-error>Phone is
+                      <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col kt-margin-bottom-20">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input type="tel" matInput placeholder="CellPhone" maxlength="20"
+                        [mask]='adminConfig.mask.phone' [showMaskTyped] = "true" [validation]="true"
+                        name="cellPhone" [(ngModel)]="user.CellPhone" #cellPhone="ngModel"/>
+                      <mat-error>CellPhone is not
+                        <strong>valid</strong>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+              </div>
+              <!-- <div class="row">
+                <div class="col kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <textarea matInput placeholder="Address" required maxlength="255"
+                      name="address" [(ngModel)]="user.Address" #address="ngModel">
+                    </textarea>
+                    <mat-error>Address is
+                      <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-4 kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input type="text" matInput placeholder="City" required maxlength="255"
+                      name="city" [(ngModel)]="user.City" #city="ngModel"/>
+                    <mat-error>City is
+                      <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <mat-label>State</mat-label>
+                    <mat-select required
+                      name="state" [(ngModel)]="user.State" #state>
+                      <mat-option disabled selected>None</mat-option>
+                      <mat-option *ngFor="let state of stateUS | toArray" [value]="state.key">{{ state.value }}</mat-option>
+                    </mat-select>
+                    <mat-error>State is
+                      <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input type="tel" matInput placeholder="Zip Code" required maxlength="5"
+                      name="zipCode" [(ngModel)]="user.ZipCode" #zipCode="ngModel">
+                    <mat-error>Zip Code is
+                      <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div> -->
+              <!-- <div class="row">
+                <div class="col-lg-4 kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input type="number" matInput placeholder="Store ID" required
+                      name="storeID" [(ngModel)]="user.StoreID" #StoreID="ngModel">
+                    <mat-error>Store ID is
+                      <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input type="tel" matInput placeholder="Store Zip Code" maxlength="5"
+                      name="StoreZipCode" [(ngModel)]="user.StoreZipCode" #StoreZipCode="ngModel"/>
+                  </mat-form-field>
+                </div>
+                <div class="col-lg-4 kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input type="text" matInput placeholder="External Customer CardID" maxlength="255"
+                      name="ExternalCustomerCardID" [(ngModel)]="user.ExternalCustomerCardID" #ExternalCustomerCardID="ngModel"/>
+                  </mat-form-field>
+                </div>
+              </div> -->
+              <!-- <div class="row">
+                  <div class="col-lg-4 kt-margin-bottom-20">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input type="tel" matInput placeholder="Secondary Cell Phone" maxlength="20"
+                        name="SecondaryCellPhone" [(ngModel)]="user.SecondaryCellPhone" #SecondaryCellPhone="ngModel"/>
+                    </mat-form-field>
+                  </div>
+              </div> -->
+              <!-- <div class="row pb-2">
+                <div class="col-md-4 kt-margin-bottom-20">
+                  <mat-slide-toggle name="receiveEmail" [(ngModel)]="user.ReceiveEmail">Receive email</mat-slide-toggle>
+                </div>
+                <div class="col-md-4 kt-margin-bottom-20">
+                  <mat-slide-toggle name="receiveTextMessage" [(ngModel)]="user.ReceiveTextMessage">Receive text message</mat-slide-toggle>
+                </div>
+                <div class="col-md-4 kt-margin-bottom-20">
+                  <mat-slide-toggle name="loyaltyAutoEnroll" [(ngModel)]="user.LoyaltyAutoEnroll">Loyalty auto enroll</mat-slide-toggle>
+                </div>
+              </div> -->
+
+              <!-- disable feature only for United  -->
+              <div class="row">
+                  <div class="col-lg-4 kt-margin-bottom-20">
+                    <mat-slide-toggle name="IsAuthorized" [(ngModel)]="user.IsAuthorized">Is Authorized</mat-slide-toggle>
+                  </div>
+                  <div class="col-lg-4 kt-margin-bottom-20">
+                    <mat-slide-toggle name="IsLockedOut" [(ngModel)]="user.IsLockedOut">Is Locked Out</mat-slide-toggle>
+                  </div>
+              </div>
+              <div class="row pt-2">
+                <div class="col kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input matInput placeholder="Last Activity" readonly name="LastUpdatedDate" [value]="typesUtilsService.convertToFullDate(user.LastUpdatedDate)">
+                  </mat-form-field>
+                </div>
+
+                <div class="col kt-margin-bottom-20">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input matInput placeholder="Last Login" readonly name="LastLoginDate" [value]="typesUtilsService.convertToFullDate(user.LastLoginDate)">
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </form>
+          <!--end::Form-->
+        </ng-template>
+      </mat-tab>
+      <mat-tab [disabled]="!user || !user.Email">
+        <ng-template mat-tab-label>
+          <i class="mat-tab-label-icon fa fa-address-book"></i>
+          Addresses
+        </ng-template>
+        <ng-template matTabContent>
+          <kt-address [user]="user"></kt-address>
+        </ng-template>
+      </mat-tab>
+      <mat-tab [disabled]="!user || !user.Email">
+        <ng-template mat-tab-label>
+          <i class="mat-tab-label-icon fa fa-user-cog"></i>
+          Roles
+        </ng-template>
+        <ng-template matTabContent>
+          <kt-user-roles-list [user]="user" [loading]="loading$" [active]="selectedTab === 2"></kt-user-roles-list>
+        </ng-template>
+      </mat-tab>
+      <mat-tab [disabled]="!user || !user.Email">
+        <ng-template mat-tab-label>
+          <i class="mat-tab-label-icon fa fa-chess-king"></i>
+          Privilege
+        </ng-template>
+        <ng-template matTabContent>
+          <kt-change-password [user]="user" [loading]="loading$" [active]="selectedTab === 3"></kt-change-password>
+        </ng-template>
+      </mat-tab>
+      <mat-tab [disabled]="!user || !user.Email">
+        <ng-template mat-tab-label>
+          <i class="mat-tab-label-icon fa fa-user-plus"></i>
+          Stores
+        </ng-template>
+        <ng-template matTabContent>
+          <user-assign-stores-tab [user]="user" [active]="selectedTab === 3"></user-assign-stores-tab>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
+  </kt-portlet-body>
+</kt-portlet>

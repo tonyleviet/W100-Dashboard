@@ -1,0 +1,94 @@
+<kt-portlet class="user-list">
+  <kt-portlet-header [title]="'Users'" [class]="'kt-portlet__head--lg'" [viewLoading$]="dataSource.loading$">
+    <ng-container ktPortletTools>
+      <button (click)="openDialogCreateUser()" mat-raised-button color="primary" matTooltip="Create new User">
+        <i class="la la-plus"></i>
+        New user
+      </button>
+    </ng-container>
+  </kt-portlet-header>
+  <kt-portlet-body>
+    <div class="row kt-margin-b-20">
+      <div class="col-lg-12" [ngStyle]="{ 'margin-left': '-15px' }">
+        <ng-container *ngFor="let sort of sortStatuses">
+          <button mat-button color="primary" class="sort-status-btn" (click)="sortByStatus(sort.key)"
+            [ngClass]="{ 'selected': sortStatus === sort.key }">{{sort.name}} ({{sort.count | number}})</button>
+        </ng-container>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-3 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <input matInput #searchInput placeholder="Search all fields" />
+          <button mat-button *ngIf="searchInput.value" matSuffix mat-icon-button aria-label="Clear"
+            (click)="searchInput.value=''; this.search();">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="mat-table__wrapper">
+      <mat-table class="lmat-elevation-z8" mat-table #table [dataSource]="dataSource">
+        <!-- id Column -->
+        <ng-container matColumnDef="id">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> # </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user; let idx = index"> {{getItemIndex(idx + 1)}} </mat-cell>
+        </ng-container>
+        <!-- userName Column -->
+        <ng-container matColumnDef="userName">
+          <mat-header-cell mat-header-cell *matHeaderCellDef > User Name </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user"> {{user.Email}} </mat-cell>
+        </ng-container>
+        <!-- email Column -->
+        <ng-container matColumnDef="fullName" class="full-name">
+          <mat-header-cell mat-header-cell *matHeaderCellDef class="full-name"> Full Name </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user" class="full-name"> {{user.FirstName}} {{user.LastName}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="role">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> Role </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user"> {{user.ListRoles.join(', ')}} </mat-cell>
+        </ng-container>
+        <!-- status Column -->
+        <ng-container matColumnDef="status">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user"> <span class="kt-badge kt-badge--inline"
+              [ngClass]="{'kt-badge--success': user.IsAuthorized, 'kt-badge--warning': !user.IsAuthorized}">{{user.IsAuthorized ? 'active' : 'inactive'}}
+            </span></mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="isLockedOut">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> Locked </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user" class="text-center">
+            <mat-icon>{{ user.IsLockedOut ? 'lock' : 'lock_open' }}</mat-icon>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="lastLoginDate">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> Last Login </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user">
+            <span>{{user.LastLoginDate | amParseZone | amDateFormat: 'MM/DD/YYYY HH:mm'}}</span> </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user">
+            <!-- <button mat-icon-button aria-label="Detail" [routerLink]="[ element.id, 'detail' ]" color>
+              <mat-icon>visibility</mat-icon>
+            </button> -->
+            <button mat-icon-button aria-label="Edit" [routerLink]="[ (user.Email || user.UserName), 'edit' ]" color="primary">
+              <mat-icon>create</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+      <div class="mat-table__message" *ngIf="!dataSource.hasItems && !(dataSource.isPreloadTextViewed$ | async)">No
+        records found</div>
+      <div class="mat-table__message" *ngIf="dataSource.isPreloadTextViewed$ | async">Please wait....</div>
+    </div>
+    <div class="mat-table__bottom">
+      <mat-spinner [diameter]="20" *ngIf="dataSource.loading$ | async"></mat-spinner>
+      <mat-paginator [length]="dataSource.paginatorTotal$ | async" [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions" (page)="pageEvent = getPaginatorData($event)" [showFirstLastButtons]="true">
+      </mat-paginator>
+    </div>
+  </kt-portlet-body>
+</kt-portlet>

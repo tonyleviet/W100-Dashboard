@@ -1,0 +1,50 @@
+<div [class.actionloading]="loading$ | async">
+	<div class="form-group row">
+		<div class="col-lg-4 kt-margin-bottom-20-mobile">
+			<mat-form-field class="mat-form-field-fluid">
+				<input matInput #storeCodeInput [formControl]="storeCodeCtrl" placeholder="Search by Store Name, Store Code, Zip Code" [matAutocomplete]="storeAuto" [(ngModel)]="ipValue">
+				<button *ngIf="selectedStore || ipValue" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="onClearSelectedStore(); ipValue=''">
+					<mat-icon>close</mat-icon>
+				</button>
+				<mat-autocomplete #storeAuto="matAutocomplete" class="store-autocomplete" (optionSelected)="storeSelected($event)" [displayWith]="displayACStoreFn">
+					<mat-option *ngFor="let store of filteredStores$ | async" [value]="store">
+						{{ store.Name }} - Code: {{ store.StoreCode }}, Zipcode: {{ store.ZipCode }}
+					</mat-option>
+				</mat-autocomplete>
+			</mat-form-field>
+    </div>
+
+      <ng-container *ngIf="selectedStore">
+
+        <div class="col-lg-1 kt-margin-bottom-20-mobile pin">
+          <mat-form-field class="mat-form-field-fluid">
+            <input type="tel" matInput name="pin" id="pin" [(ngModel)]="userPin" placeholder="PIN"  #pin [mask]='adminConfig.mask.pin' [showMaskTyped]="true" required value="000000">
+            <mat-error> <small>PIN must be 6 digits.</small> </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-3 kt-margin-bottom-20-mobile form-group" >
+          <mat-form-field class="mat-form-field-fluid" >
+            <mat-select multiple placeholder="Permissions" (selectionChange)="onPermissionChange($event)" [(ngModel)]="servicesSelected"  id="acl" name="acl" #acl="ngModel" required>
+              <mat-select-trigger>
+                {{servicesSelected ? getServiceName(servicesSelected[0]) : ''}}
+                <span *ngIf="servicesSelected.length > 1" class="example-additional-selection" >
+                  (+{{servicesSelected.length - 1}} {{servicesSelected.length === 2 ? 'service' : 'services'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let service of listServices" [value]="service.ServiceId">{{ service.ServiceName }}</mat-option>
+            </mat-select>
+            <mat-error> <small> Service is required.</small> </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-lg-2 kt-margin-bottom-20-mobile">
+          <button type="button" color="primary" mat-raised-button (click)="onSubmit()" [disabled]="pinValid == false || !acl.valid">
+            <span class="kt-hidden-mobile">Assign store</span>
+          </button>
+        </div>
+      </ng-container>
+
+		<div class="col-lg-12" *ngIf="listAllStores.length < 0 && (loading$ | async) == false">
+			No stores available. Please disable <strong>AdBlock</strong> and refresh the page.
+		</div>
+	</div>
+</div>

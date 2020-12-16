@@ -1,0 +1,18 @@
+.mat-table__wrapper{
+    .kt-badge{
+        font-size: 0.9rem !important;
+        font-weight: 500;
+    }
+}
+.user-list {
+    .sort-status-btn {
+        font-weight: 300;
+
+        &.selected {
+            font-weight: 600;
+        }
+    }
+}
+.full-name{
+  padding-left: 15px;
+}

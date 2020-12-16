@@ -1,0 +1,9 @@
+.mat-column-actions {
+  flex: 0 0 60px;
+}
+
+.mat-header-cell:not(:first-child):not(:last-child),
+.mat-cell:not(:first-child):not(:last-child) {
+  flex: 0 0 100px;
+  padding-left: 15px;
+}

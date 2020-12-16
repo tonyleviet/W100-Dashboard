@@ -1,0 +1,10 @@
+.kt-login__body {
+  .form-group {
+    .mat-form-field-suffix {
+      position: absolute;
+      right: 0;
+      top: 0;
+      transform: translate(0, 50%);
+    }
+  }
+}

@@ -1,0 +1,23 @@
+<div class="side-view" *ngIf="selected$ | async">
+  <div class="side-view-preview">
+    <i (click)="onClick($event, 'closeSideView')" class="fas fa-times side-view-close"></i>
+
+    <div class="side-view-preview-title">Information</div>
+
+    <div class="side-view-preview-content">
+      <ng-container
+        [ngTemplateOutletContext]="{$implicit: node}"
+        [ngTemplateOutlet]="sideViewTemplate">
+      </ng-container>
+    </div>
+
+    <div class="side-view-buttons">
+      <button *ngIf="!node.isFolder" mat-stroked-button color="primary" (click)="onClick($event, 'download')" 
+              [disabled]="!allowFolderDownload && node.isFolder">
+        Download
+      </button>
+      <button *ngIf="node.isFolder" mat-stroked-button color="primary" (click)="onClick($event, 'renameConfirm')">Rename</button>
+      <button mat-button color="warn" (click)="onClick($event, 'removeAsk')">Delete</button>
+    </div>
+  </div>
+</div>

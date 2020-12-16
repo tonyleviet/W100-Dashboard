@@ -1,0 +1,92 @@
+<kt-portlet>
+  <kt-portlet-header [title]="'Role: ' + roleName" [class]="'kt-portlet__head--lg'"
+    [viewLoading$]="dataSource.loading$">
+    <ng-container ktPortletTools>
+      <a [routerLink]="['../../']" class="btn btn-secondary kt-margin-r-10" mat-raised-button
+        matTooltip="Back to the users list">
+        <i class="la la-arrow-left"></i>
+        <span class="kt-hidden-mobile">Back</span>
+      </a>
+      <a href="javascript:;" class="btn btn-primary kt-margin-r-10" color="primary"
+        (click)="isAssignUserCollapsed = !isAssignUserCollapsed" mat-raised-button>
+        <i class="la la-close" [ngClass]="{ 'la-plus': isAssignUserCollapsed }"></i>
+        <span class="kt-hidden-mobile">Assign user</span>
+      </a>
+    </ng-container>
+  </kt-portlet-header>
+
+  <kt-portlet-body>
+    <div class="kt-form">
+      <div class="kt-form__filtration">
+        <div class="row">
+          <div class="col-md-4 kt-margin-bottom-10-mobile">
+            <div id="collapseAssignUser" [ngbCollapse]="isAssignUserCollapsed">
+              <mat-form-field class="mat-form-field-fluid">
+                <input matInput #searchACInput [matAutocomplete]="auto"
+                  placeholder="Search user">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                  <ng-container *ngIf="!(autoCompleteData.isLoading$ | async)">
+                    <mat-option *ngFor="let user of autoCompleteData.users" [value]="user" (click)="assignUserToRole(user)">
+                      <span>{{ user.FirstName }} {{ user.LastName }}</span>
+                      <small> - {{ user.Email }}</small>
+                    </mat-option>
+                  </ng-container>
+                </mat-autocomplete>
+                <mat-hint align="start">
+                  Find and pick user to assign to this group. eg. Jame
+                </mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-md-5">
+              <mat-spinner [diameter]="20" *ngIf="autoCompleteData.isLoading$ | async"></mat-spinner>
+          </div>
+          <div class="col-md-3 kt-margin-bottom-10-mobile"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mat-table__wrapper">
+      <mat-table class="lmat-elevation-z8" mat-table #table [dataSource]="dataSource">
+        <!-- id Column -->
+        <ng-container matColumnDef="id">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> # </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user; let idx = index"> {{idx + 1}} </mat-cell>
+        </ng-container>
+        <!-- name Column -->
+        <ng-container matColumnDef="name">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user"> {{user.UserProfile?.FirstName || '' + ' ' + user.UserProfile?.LastName || ''}} </mat-cell>
+        </ng-container>
+        <!-- userName Column -->
+        <ng-container matColumnDef="userName">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> User Name </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user"> {{user.UserName}} </mat-cell>
+        </ng-container>
+        <!-- email Column -->
+        <ng-container matColumnDef="email">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> Email </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user"> {{user.Email}} </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <mat-header-cell mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+          <mat-cell mat-cell *matCellDef="let user">
+            <button mat-icon-button color="warn" matTooltip="Archive" type="button" (click)="removeUserFromRole(user.UserProfile)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+      <div class="mat-table__message" *ngIf="!dataSource.hasItems">No records found</div>
+      <div class="mat-table__message" *ngIf="dataSource.isPreloadTextViewed$ | async">Please wait....</div>
+    </div>
+    <div class="mat-table__bottom display-none">
+      <mat-spinner [diameter]="20" *ngIf="dataSource.loading$ | async"></mat-spinner>
+      <mat-paginator [length]="dataSource.paginatorTotal$ | async" [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions" (page)="pageEvent = getPaginatorData($event)" [showFirstLastButtons]="true">
+      </mat-paginator>
+    </div>
+  </kt-portlet-body>
+</kt-portlet>

@@ -1,0 +1,42 @@
+<div class="store-assigned-list" [class.actionloading]="loading$ | async">
+	<h6 class="kt-section__heading">
+		Stores assigned:
+	</h6>
+	<div class="mat-table__wrapper">
+		<mat-table class="lmat-elevation-z8" #table [dataSource]="storesAssigned" matSort >
+
+			<ng-container matColumnDef="storeCode">
+				<mat-header-cell *matHeaderCellDef [style.flex.px]="'0 0 125'"> Store Code </mat-header-cell>
+				<mat-cell *matCellDef="let item" [style.flex.px]="'0 0 125'">{{ item.StoreCode }}</mat-cell>
+			</ng-container>
+			<ng-container matColumnDef="storeName">
+				<mat-header-cell *matHeaderCellDef> Store Name </mat-header-cell>
+				<mat-cell *matCellDef="let item">{{ getStoreNameById(item.StoreId) }}</mat-cell>
+			</ng-container>
+
+			<ng-container matColumnDef="permission">
+				<mat-header-cell *matHeaderCellDef> Permissions </mat-header-cell>
+				<mat-cell *matCellDef="let item">{{ item.ACL ? getServiceNames(item.ACL.Services): '--'  }}</mat-cell>
+			</ng-container>
+
+			<!-- Action Column -->
+			<ng-container matColumnDef="action">
+				<mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+				<mat-cell *matCellDef="let item">
+					<button mat-icon-button aria-label="Edit" title="Edit" color="primary" matTooltip="Edit"
+						(click)="onEdit(item)">
+						<mat-icon>create</mat-icon>
+					</button>
+					<button mat-icon-button color="warn" matTooltip="Unassign store" type="button" (click)="onUnassign(item)">
+						<mat-icon>delete</mat-icon>
+					</button>
+				</mat-cell>
+			</ng-container>
+			<!-- /end Action Column -->
+
+			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+			<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+		</mat-table>
+		<div class="mat-table__message" *ngIf="!(loading$ | async) && storesAssigned && storesAssigned.length === 0">No records found.</div>
+	</div>
+</div>

@@ -1,0 +1,12 @@
+<div class="core-ui-paginator">
+  <mat-paginator
+    [length]="paginator.totalRecord"
+    [pageIndex]="paginator.pageIndex && (paginator.pageIndex - 1) || 0"
+    [pageSize]="paginator.pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    [showFirstLastButtons]="true"
+    [disabled]="loading"
+    (page)="onChangePage($event)"
+  >
+  </mat-paginator>
+</div>

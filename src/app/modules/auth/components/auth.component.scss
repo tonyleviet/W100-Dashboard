@@ -1,0 +1,99 @@
+// import login css
+@import "sass/pages/login/login-1";
+
+kt-auth,
+.kt-login {
+  height: 100%;
+
+  .mat-form-field {
+    width: 100%;
+  }
+
+  // add extra right padding when displaying spinner in button
+  .kt-spinner {
+    padding-right: 3rem !important;
+  }
+}
+.kt-login__title {
+  color: red !important;
+}
+.kt-login__subtitle {
+  color: #fff !important;
+  font-size: 16px;
+  line-height: 23px;
+  font-weight: 500 !important;
+}
+.kt-login__list_content {
+  color: rgb(248, 239, 239) !important;
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 300 !important;
+}
+ul {
+  margin: 5px 0 15px;
+  padding: 0;
+  li {
+    list-style: none;
+    position: relative;
+    padding: 0 0 0 20px;
+  }
+}
+ul.kt-login__list_content {
+  li {
+    &::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 5px;
+      height: 5px;
+      transform: translate(100%, 160%);
+      background-color: red;
+      border-radius: 50%;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+    }
+  }
+}
+
+.left-background {
+  background-image: url('~/assets/media/bg/Workbench_LogIn_Screen_Left_1.png');
+  background-size: cover;
+}
+
+svg {
+  path.cls-2 {
+    fill: #fff;
+  }
+}
+
+.left-logo {
+  width: 200px;
+  height: 120px;
+}
+.contact {
+  font-size: 12px;
+  color: #fff !important;
+  margin-bottom: 30px;
+  a {
+    color: red;
+
+    &:last-child {
+      color: #fff;
+    }
+  }
+}
+.kt-login__copyright {
+  color: #fff !important;
+}
+.sale-channels {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .sale-channel {
+    img {
+      width: 129px;
+    }
+  }
+}

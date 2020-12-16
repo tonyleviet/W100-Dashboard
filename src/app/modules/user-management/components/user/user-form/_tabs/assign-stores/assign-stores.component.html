@@ -1,0 +1,12 @@
+<div>
+  <h6 class="kt-section__heading">
+    Assign to Stores
+  </h6>
+  <assign-store-form [listAllStores]="listAllStores" [loading$]="fetchAllStoresLoading$" [listServices]="listServices"
+    [assignedStores]="listStoreCodes" [shouldReset$]="shouldResetAssignStoreForm$"
+    (handleAssignStoreSubmit)="onAssignStoreSubmit($event)" (handleSelectingStore)="onStoreSelecting($event)">
+  </assign-store-form>
+  <store-assigned-list [services]="services$ | async" [storesAssigned]="listStoreAssigned" [listAllStores]="listAllStores"
+    [listServices]="listServices" [loading$]="fetchAssignedStoresLoading$" (handleUpdateStore)="onUpdateStore($event)"
+    (handleUnassignStore)="onUnAssignStore($event)" (handleOpenEditDialog)="onOpenEditDialog($event)"></store-assigned-list>
+</div>

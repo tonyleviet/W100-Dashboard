@@ -1,0 +1,20 @@
+<!--begin::Form-->
+<div class="kt-form kt-form--group-seperator-dashed" [class.actionloading]="loadingPage$ | async">
+  <div class="clearfix pb-4" *ngFor="let item of data; let i = index" [attr.data-index]="i">
+    <kt-address-form [address]="item" [index]="i" [loading]="loading$ | async" [allowRemove]="allowRemove()"
+      (onRemove)="removeAddress($event)" (onSave)="updateAddress($event)">
+    </kt-address-form>
+  </div>
+  <div class="row">
+    <div class="col text-right">
+      <button type="button" mat-raised-button color="primary"
+        [ngClass]="{'kt-spinner kt-spinner--right kt-spinner--md kt-spinner--light': loading$ | async}"
+        [disabled]="loading$ | async"
+        (click)="addAddress()">
+        Add new Address
+      </button>
+    </div>
+  </div>
+</div>
+<!--end::Form-->
+<!-- <pre>{{ data | json }}</pre> -->

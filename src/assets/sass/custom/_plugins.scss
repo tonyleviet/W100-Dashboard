@@ -1,0 +1,35 @@
+.hint-tooltip {
+	.tooltip-inner {
+		min-width: 200px;
+	}
+}
+
+.CodeMirror {
+	height: 800px!important;
+}
+.venntooltip {
+	position: absolute;
+	font-size: 12px;
+	text-align: center;
+	width: 128px;
+	height: 16px;
+	background: #333;
+	color: #ddd;
+	padding: 2px;
+	border: 0px;
+	border-radius: 8px;
+	opacity: 0;
+}
+
+.venn-area.venn-circle, .venn-area.venn-intersection {
+	&.selected {
+		path {
+			fill-opacity: 1!important;
+			stroke-opacity: 1!important;
+		}
+	}
+}
+
+.mat-form-field-subscript-wrapper {
+	font-size: 100%!important;
+}

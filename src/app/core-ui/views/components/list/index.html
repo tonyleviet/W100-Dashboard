@@ -1,0 +1,24 @@
+<div class="table">
+  <mat-table [dataSource]="dataSource">
+    <mat-header-row *matHeaderRowDef="headerColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: headerColumns"></mat-row>
+
+    <ng-container *ngFor="let column of definedColumns" [cdkColumnDef]="column.field">
+      <mat-header-cell *cdkHeaderCellDef>{{ column.title }}</mat-header-cell>
+      <mat-cell
+        *cdkCellDef="let element; let i = index"
+        [innerHTML]="getCellValue(column, element, i) | dynamic: column.format | safe: 'html,url'">
+          {{ getCellValue(column, element, i) | dynamic: column.format }}
+      </mat-cell>
+    </ng-container>
+
+  </mat-table>
+
+  <div class="mat-table__message text-center kt-margin-t-15" *ngIf="(!dataSource || !dataSource.length) && !loading">
+    {{ emptyMessage || 'Have no data!' }}
+  </div>
+
+  <div class="spinner" *ngIf="loading">
+    <mat-spinner [diameter]="35"></mat-spinner>
+  </div>
+</div>

@@ -1,0 +1,226 @@
+<div class="modal-header">
+  <h3 class="modal-title">Create new User</h3>
+</div>
+<div mat-dialog-content class="mat-typography m-0"
+  [class.actionLoading]="loading$ | async">
+  <form action="" method="post" enctype="multipart/form-data" autocomplete="off" class="example-form py-3"
+    [mustMatch]="['password', 'confirmPassword']"
+    (ngSubmit)="modelForm.form.valid && isValidDate && onSubmit()" #modelForm="ngForm">
+    <!--begin::Form-->
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="mat-form-field-fluid">
+          <input type="email" matInput placeholder="Username" required autocomplete="username" maxlength="100"
+            [pattern]="adminConfig.regex.email" email
+            name="userName" [(ngModel)]="model.UserName" #userName="ngModel"/>
+          <mat-hint>Email</mat-hint>
+          <mat-error *ngIf="userName.invalid && (userName.dirty || userName.touched)">
+            <span *ngIf="userName.errors?.required">
+              Username is <strong>required</strong>
+            </span>
+            <span *ngIf="userName.errors?.pattern">
+              Username is not <strong>valid</strong>
+            </span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field class="mat-form-field-fluid">
+          <input type="email" matInput placeholder="Email" required email maxlength="100"
+            [pattern]="adminConfig.regex.email"
+            name="email" [(ngModel)]="model.Email" #email="ngModel"/>
+          <mat-error *ngIf="email.invalid && (email.dirty || email.touched)">
+            <span *ngIf="email.errors?.required">
+              Email is <strong>required</strong>
+            </span>
+            <span *ngIf="email.errors?.pattern">
+              Email is not <strong>valid</strong>
+            </span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="mat-form-field-fluid">
+          <input type="password" matInput placeholder="Password" autocomplete="new-password"
+            [type]="hidePassword ? 'password' : 'text'" required minlength="6" maxlength="12"
+            [pattern]="adminConfig.regex.password"
+            name="password" [(ngModel)]="model.Password" #password="ngModel"/>
+          <div mat-icon-button matSuffix (click)="hidePassword = !hidePassword" tabindex="-1"
+            [attr.aria-label]="'Hide password'" class="cursor-pointer">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </div>
+          <mat-error *ngIf="password.invalid && (password.dirty || password.touched)">
+            <div *ngIf="password.errors?.required">Password is <strong>required</strong></div>
+            <div *ngIf="password.errors?.pattern">Password must be 6-12 characters long and include at least one letter and one number.</div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field class="mat-form-field-fluid">
+          <input type="password" matInput placeholder="Password confirm" autocomplete="new-password"
+            [type]="hideConfirmPassword ? 'password' : 'text'" required minlength="6" maxlength="12"
+            [pattern]="adminConfig.regex.password"
+            name="confirmPassword" [(ngModel)]="model.ConfirmPassword" #confirmPassword="ngModel"/>
+          <div mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" tabindex="-1"
+            [attr.aria-label]="'Hide password'" class="cursor-pointer">
+            <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </div>
+          <mat-error *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)">
+            <div *ngIf="confirmPassword.errors?.required">Confirm password is <strong>required</strong></div>
+            <div *ngIf="confirmPassword.errors?.pattern">Password must be 6-12 characters long and include at least one letter and one number.</div>
+            <div *ngIf="confirmPassword.errors?.mustMatch">The Confirmation Password does not match.</div>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="mat-form-field-fluid">
+          <input type="text" matInput placeholder="First name" required maxlength="50"
+            name="firstName" [(ngModel)]="model.FirstName" #firstName="ngModel"/>
+          <mat-error>First name is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field class="mat-form-field-fluid">
+          <input type="text" matInput placeholder="Middle name" maxlength="50"
+            name="middleName" [(ngModel)]="model.MiddleName" #middleName="ngModel"/>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field class="mat-form-field-fluid">
+          <input type="text" matInput placeholder="Last name" required maxlength="50"
+            name="lastName" [(ngModel)]="model.LastName" #lastName="ngModel"/>
+          <mat-error>Last name is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        </div>
+    </div>
+
+    <!-- <div class="row">
+      <div class="col">
+        <mat-form-field>
+          <input matInput [matDatepicker]="picker" placeholder="Birthday"
+            [mask]='adminConfig.mask.date' [showMaskTyped] = "true" [validation]="true"
+            (dateInput)="inputDateChange(birthDate.value)" (dateChange)="inputDateChange(birthDate.value)"
+            #birthDate
+          />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <div class="mat-error" role="alert" style="position: relative; top: -15px;" *ngIf="!isValidDate">
+          Birthday is invalidDate
+        </div>
+      </div>
+    </div> -->
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="mat-form-field-fluid">
+          <input type="text" matInput placeholder="Phone" required maxlength="20"
+            [mask]='adminConfig.mask.phone' [showMaskTyped] = "true" [validation]="true"
+            name="phone" [(ngModel)]="model.Phone" #phone="ngModel"/>
+          <mat-error>Phone is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field class="mat-form-field-fluid">
+          <input type="tel" matInput placeholder="CellPhone" maxlength="20"
+            [mask]='adminConfig.mask.phone' [showMaskTyped] = "true" [validation]="true"
+            name="cellPhone" [(ngModel)]="model.CellPhone" #cellPhone="ngModel"/>
+          <mat-error>CellPhone is not
+            <strong>valid</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="mat-form-field-fluid">
+          <textarea matInput placeholder="Address" required maxlength="40"
+            name="address" [(ngModel)]="model.Address" #address="ngModel">
+          </textarea>
+          <mat-error>Address is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="mat-form-field-fluid">
+          <input type="text" matInput placeholder="City" required maxlength="30"
+            name="city" [(ngModel)]="model.City" #city="ngModel"/>
+          <mat-error>City is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <!-- <pre>{{ stateUS | toArray | json }}</pre> -->
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>State</mat-label>
+          <mat-select required
+            name="state" [(ngModel)]="model.State" #state>
+            <mat-option disabled selected>None</mat-option>
+            <mat-option *ngFor="let state of stateUS | toArray" [value]="state.key">{{ state.value }}</mat-option>
+          </mat-select>
+          <mat-error>State is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col">
+        <mat-form-field class="mat-form-field-fluid">
+          <input matInput type="tel" placeholder="Zip Code" maxlength="10" required
+            [mask]='adminConfig.mask.zipCode' [showMaskTyped] = "true" [validation]="true"
+            name="zipCode" [(ngModel)]="model.ZipCode" #zipCode="ngModel">
+          <mat-error>Zip Code is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <!-- <div class="row pt-4">
+      <div class="col">
+        <mat-slide-toggle name="receiveEmail" [(ngModel)]="model.ReceiveEmail">Receive email</mat-slide-toggle>
+      </div>
+      <div class="col">
+        <mat-slide-toggle name="receiveTextMessage" [(ngModel)]="model.ReceiveTextMessage">Receive text message</mat-slide-toggle>
+      </div>
+      <div class="col">
+        <mat-slide-toggle name="loyaltyAutoEnroll" [(ngModel)]="model.LoyaltyAutoEnroll">Loyalty auto enroll</mat-slide-toggle>
+      </div>
+    </div> -->
+    <!--end::Form-->
+    <!-- <div class="row classAlert">
+      <div class="col">
+        <div class="alert alert-danger" role="alert" *ngIf="error$ | async as error" style="max-width: 100%;">
+          {{ error.Message }}
+        </div>
+        <div class="alert alert-success" role="alert" *ngIf="responsive$ | async as responsive" style="max-width: 100%;">
+          {{ responsive }}
+        </div>
+      </div>
+    </div> -->
+  </form>
+  <div class="row pt-2 pb-3 modal-footer">
+    <button type="button" mat-raised-button mat-dialog-close [disabled]="isLoading">
+      Cancel
+    </button>
+    <button type="submit" mat-raised-button color="primary" class="ml-2"
+      [ngClass]="{'kt-spinner kt-spinner--right kt-spinner--md kt-spinner--light': isLoading}"
+      (click)="modelForm.ngSubmit.emit();"
+      [disabled]="!modelForm.form.valid || !isValidDate || isLoading">
+      Create
+    </button>
+  </div>
+  <!-- <pre>{{ model | json }}</pre> -->
+  <!-- <pre>{{ model.toData() | json }}</pre> -->
+</div>

@@ -1,0 +1,11 @@
+<div>
+	<query-json-editor [onSubscription]="jsonEditorSubject" [onCopySubscription]="copySubject"></query-json-editor>
+	<div class="row pt-2 pb-3 modal-footer">
+    <button type="button" mat-raised-button mat-dialog-close>
+      Close
+    </button>
+    <button type="submit" mat-raised-button color="primary" (click)="copyQuery()">
+      {{ copyTextBtn }}
+    </button>
+  </div>
+</div>

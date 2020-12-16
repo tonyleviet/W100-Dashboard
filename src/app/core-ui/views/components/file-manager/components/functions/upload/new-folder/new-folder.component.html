@@ -1,0 +1,16 @@
+<h3 class="modal-title">
+  New folder
+</h3>
+<p class="new-folder-name">
+  Folder name
+</p>
+<input #uploadFolder placeholder="Folder name" (keyup)="onInputChange($event)" (keyup.enter)="onClick()"
+  onclick="this.select();" type="text" class="new-folder-input" />
+<div class="new-folder-button">
+  <button mat-raised-button color="primary" (click)="onClick()">
+    New folder
+  </button>&nbsp;
+  <button mat-raised-button (click)="onClose()">
+    Cancel
+  </button>
+</div>

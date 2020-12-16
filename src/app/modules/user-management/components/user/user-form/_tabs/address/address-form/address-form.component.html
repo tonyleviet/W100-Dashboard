@@ -1,0 +1,185 @@
+<!-- Begin Address Item -->
+<div [attr.data-id]="data.CS_ContactID">
+  <div class="row cleafix" *ngIf="allowRemove">
+    <div class="col">
+      <button type="button" class="ml-2 mb-1 close" aria-label="Close" (click)="remove()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+  </div>
+  <form class="kt-form__section kt-form__section--first" #addressForm="ngForm">
+    <div class="row">
+      <div class="col-lg-6 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>Title</mat-label>
+          <input type="text" matInput placeholder="Title" maxlength="100"
+            name="Title" [(ngModel)]="data.Title" #Title="ngModel" />
+        </mat-form-field>
+      </div>
+      <div class="col-lg-6 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>Email</mat-label>
+          <input type="email" matInput placeholder="Email" required email maxlength="100"
+            [pattern]="adminConfig.regex.email"
+            name="Email" [(ngModel)]="data.Email" #Email="ngModel"/>
+          <mat-error>Email is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>First Name</mat-label>
+          <input type="text" matInput placeholder="First Name" required maxlength="50"
+            name="FirstName" [(ngModel)]="data.FirstName" #FirstName="ngModel" />
+          <mat-error>First Name is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-lg-6 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>Last Name</mat-label>
+          <input type="text" matInput placeholder="Last Name" required maxlength="50"
+            name="LastName" [(ngModel)]="data.LastName" #LastName="ngModel" />
+          <mat-error>Last Name is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>Phone</mat-label>
+          <input type="tel" matInput placeholder="Phone" required maxlength="20"
+            [mask]='adminConfig.mask.phone' [showMaskTyped] = "true" [validation]="true"
+            name="Phone" [(ngModel)]="data.Phone" #Phone="ngModel" />
+          <mat-error>Phone is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-lg-6 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>Secondary Phone</mat-label>
+          <input type="tel" matInput placeholder="Secondary Phone" maxlength="20"
+            [mask]='adminConfig.mask.phone' [showMaskTyped] = "true" [validation]="true"
+            name="SecondaryPhone" [(ngModel)]="data.SecondaryPhone" #SecondaryPhone="ngModel" />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>Mobile Phone</mat-label>
+          <input type="tel" matInput placeholder="Mobile Phone" maxlength="20"
+            [mask]='adminConfig.mask.phone' [showMaskTyped] = "true" [validation]="true"
+            name="MobilePhone" [(ngModel)]="data.MobilePhone" #MobilePhone="ngModel" />
+        </mat-form-field>
+      </div>
+      <div class="col-lg-6 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>Fax</mat-label>
+          <input type="tel" matInput placeholder="Fax" maxlength="20"
+            [mask]='adminConfig.mask.phone' [showMaskTyped] = "true" [validation]="true"
+            name="Fax" [(ngModel)]="data.Fax" #Fax="ngModel" />
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>Address</mat-label>
+          <textarea matInput placeholder="Address" required maxlength="40"
+            name="address" [(ngModel)]="data.Address" #address="ngModel">
+          </textarea>
+          <mat-error>Address is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>City</mat-label>
+          <input type="text" matInput placeholder="City" required maxlength="30"
+            name="city" [(ngModel)]="data.City" #city="ngModel"/>
+          <mat-error>City is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-lg-6 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>State</mat-label>
+          <mat-select required
+            name="state" [(ngModel)]="data.State" #state="ngModel">
+            <mat-option disabled selected>None</mat-option>
+            <mat-option *ngFor="let state of stateUS | toArray" [value]="state.key">{{ state.value }}</mat-option>
+          </mat-select>
+          <mat-error>State is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>Zip code</mat-label>
+          <input type="tel" matInput placeholder="Zip Code" required maxlength="10"
+            [mask]='adminConfig.mask.zipCode' [showMaskTyped] = "true" [validation]="true"
+            name="zipCode" [(ngModel)]="data.ZipCode" #zipCode="ngModel">
+          <mat-error>Zip Code is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-lg-6 kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>Country</mat-label>
+          <input type="text" matInput placeholder="Country" maxlength="255" required disabled
+            name="Country" [(ngModel)]="data.Country" #Country="ngModel"/>
+          <mat-error>Country is
+            <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col kt-margin-bottom-20-mobile">
+        <mat-form-field class="mat-form-field-fluid">
+          <mat-label>Note</mat-label>
+          <textarea matInput placeholder="Note" rows="4" maxlength="255"
+            name="Note" [(ngModel)]="data.Note" #Note="ngModel">
+          </textarea>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 kt-margin-bottom-20-mobile">
+        <mat-slide-toggle name="IsBilling" [(ngModel)]="data.IsBilling">Is Billing</mat-slide-toggle>
+      </div>
+      <div class="col-lg-4 kt-margin-bottom-20-mobile">
+        <mat-slide-toggle name="IsPrimary" [(ngModel)]="data.IsPrimary">Is Primary</mat-slide-toggle>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <div class="col text-right">
+        <button type="button" mat-raised-button color="primary"
+          [ngClass]="{'kt-spinner kt-spinner--right kt-spinner--md kt-spinner--light': loading}"
+          [disabled]="!addressForm.form.valid || loading || addressForm.form.pristine"
+          (click)="save()">
+          Save
+      </button>
+    </div>
+  </div>
+  <mat-divider class="mt-5"></mat-divider>
+  <!-- End Address Item -->
+  <!-- <pre>{{ data | json }}</pre> -->
+</div>

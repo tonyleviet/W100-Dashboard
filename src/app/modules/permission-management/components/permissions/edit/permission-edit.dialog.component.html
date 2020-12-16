@@ -1,0 +1,189 @@
+<div class="kt-portlet"
+  [ngClass]="{ 'kt-portlet--body-progress' : viewLoading, 'kt-portlet--body-progress-overlay' : loadingAfterSubmit }">
+  <div class="kt-portlet__head kt-portlet__head__custom">
+    <div class="kt-portlet__head-label">
+      <h3 class="kt-portlet__head-title">Permission: {{ permissionId }}</h3>
+    </div>
+  </div>
+  <div>
+    <div class="kt-form">
+      <div class="kt-portlet__body">
+        <div class="kt-portlet__body-progress">
+          <mat-spinner [diameter]="20"></mat-spinner>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="row d-none">
+              <div class="col-12">
+                <mat-table #table [dataSource]="dataSource">
+                  <ng-container matColumnDef="userName">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let permission"> {{permission.objectName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- Dynamic columns -->
+                  <ng-container *ngFor="let col of permissionTypes; let idx = index" [matColumnDef]="col">
+                      <mat-header-cell *matHeaderCellDef>{{ col }}</mat-header-cell>
+                      <mat-cell *matCellDef="let permission">
+                        <mat-checkbox [(ngModel)]="permission.permissions[idx].activated"></mat-checkbox> &nbsp; {{ permission.permissions[idx].name }}
+                      </mat-cell>
+                  </ng-container>
+                  <!-- / Dynamic columns -->
+
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let permission">
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                </mat-table>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div class="kt-margin-b-30"></div>
+                <h6 class="kt-section__heading">
+                  Users:
+                </h6>
+                <div class="form-group kt-form__group row kt-padding-b-0">
+                  <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input matInput #searchUserInput [matAutocomplete]="autoUser" placeholder="Search user...">
+                      <mat-autocomplete #autoUser="matAutocomplete" (optionSelected)="onACSelectUser($event.option.value)" [displayWith]="displayUserFn">
+                        <mat-option *ngIf="userAutoCompleteData.isLoading$ | async">
+                          <mat-spinner [diameter]="20" class="margin-auto"></mat-spinner>
+                        </mat-option>
+                        <ng-container *ngIf="!(userAutoCompleteData.isLoading$ | async)">
+                          <mat-option *ngFor="let user of userAutoCompleteData.users" [value]="user" (onSelectionChange)="onACSelectUser(user)">
+                            <span>{{ user.FirstName }} {{ user.LastName }}</span>
+                            <small> - {{ user.Email }}</small>
+                          </mat-option>
+                        </ng-container>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                    <button type="button" mat-raised-button (click)="addUser()" matTooltip="Add user" color="info" [disabled]="!selectedUser">
+                      Add User
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <mat-table #table [dataSource]="userDataSource">
+                  <ng-container matColumnDef="userName">
+                    <mat-header-cell *matHeaderCellDef class="padding-right-20"> User Name </mat-header-cell>
+                    <mat-cell *matCellDef="let permission"> {{permission.objectName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- Dynamic columns -->
+                  <ng-container *ngFor="let col of permissionTypes; let idx = index" [matColumnDef]="col">
+                      <mat-header-cell *matHeaderCellDef class="mat-column-permission">{{ col }}</mat-header-cell>
+                      <mat-cell *matCellDef="let permission">
+                        <mat-checkbox [(ngModel)]="permission.permissions[idx].activated"></mat-checkbox> &nbsp; {{ permission.permissions[idx].name }}
+                      </mat-cell>
+                  </ng-container>
+                  <!-- / Dynamic columns -->
+
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let permission">
+                      <button mat-icon-button color="warn" matTooltip="Delete" type="button" (click)="removeUser(permission)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="userDisplayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: userDisplayedColumns;"></mat-row>
+                </mat-table>
+
+                <div class="mat-table__message text-center kt-margin-t-15" *ngIf="!userDataSource.data.length">No records found</div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div class="kt-margin-b-30"></div>
+                <h6 class="kt-section__heading">
+                  Roles:
+                </h6>
+                <div class="form-group kt-form__group row kt-padding-b-0">
+                  <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <input matInput #searchRoleInput [matAutocomplete]="autoRole" placeholder="Search role...">
+                      <mat-autocomplete #autoRole="matAutocomplete" (optionSelected)="onACSelectRole($event.option.value)" [displayWith]="roleDisplayFn">
+                        <ng-container *ngIf="roleKeyword !== ''">
+                          <mat-option *ngFor="let role of rolesResult" [value]="role">
+                            {{ role.RoleName }}
+                          </mat-option>
+                        </ng-container>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </div>
+                  <div class="col-lg-4 kt-margin-bottom-20-mobile">
+                    <button type="button" mat-raised-button (click)="addRole()" matTooltip="Add Role" color="info" [disabled]="!selectedRole">
+                      Add Role
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 pb-5 mb-2">
+                <mat-table #table [dataSource]="roleDataSource">
+                  <ng-container matColumnDef="roleName">
+                    <mat-header-cell *matHeaderCellDef> Role Name </mat-header-cell>
+                    <mat-cell *matCellDef="let permission"> {{permission.objectName}} </mat-cell>
+                  </ng-container>
+
+                  <!-- Dynamic columns -->
+                  <ng-container *ngFor="let col of permissionTypes; let idx = index" [matColumnDef]="col">
+                      <mat-header-cell *matHeaderCellDef class="mat-column-permission">{{ col }}</mat-header-cell>
+                      <mat-cell *matCellDef="let permission">
+                        <mat-checkbox [(ngModel)]="permission.permissions[idx].activated"></mat-checkbox> &nbsp; {{ permission.permissions[idx].name }}
+                      </mat-cell>
+                  </ng-container>
+                  <!-- / Dynamic columns -->
+
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                    <mat-cell *matCellDef="let permission">
+                      <button mat-icon-button color="warn" matTooltip="Delete" type="button" (click)="removeRole(permission)">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </mat-cell>
+                  </ng-container>
+
+                  <mat-header-row *matHeaderRowDef="roleDisplayedColumns"></mat-header-row>
+                  <mat-row *matRowDef="let row; columns: roleDisplayedColumns;"></mat-row>
+                </mat-table>
+
+                <div class="mat-table__message text-center kt-margin-t-15" *ngIf="!roleDataSource.data.length">No records found</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="kt-portlet__foot kt-portlet__foot--fit kt-portlet__no-border">
+        <div class="kt-form__actions kt-form__actions--solid">
+          <div class="row text-right">
+            <div class="col-lg-12">
+              <button type="button" mat-raised-button cdkFocusInitial mat-dialog-close
+                matTooltip="Cancel changes">
+                Close
+              </button>&nbsp;
+              <button type="button" mat-raised-button color="primary" (click)="onSubmit()" [disabled]="viewLoading"
+                matTooltip="Save changes">
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

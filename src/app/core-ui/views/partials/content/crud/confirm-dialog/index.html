@@ -1,0 +1,21 @@
+<div class="kt-portlet kt-confirm-dialog">
+	<div class="kt-portlet__head kt-portlet__head__custom">
+		<div class="kt-portlet__head-label">
+			<h3 class="kt-portlet__head-title">{{data.title}}</h3>
+			<span class="kt-portlet__head-icon kt-hide">
+				<i class="la la-gear"></i>
+			</span>
+		</div>
+	</div>
+	<div class="kt-form kt-form--label-align-right kt-form--group-seperator-dashed">
+		<div class="kt-portlet__body">
+      <span>{{ data.message }}</span>
+		</div>
+		<div class="kt-portlet__foot kt-portlet__no-border kt-portlet__foot--fit text-right">
+			<div class="kt-form__actions kt-form__actions--solid">
+        <button type="button" mat-raised-button (click)="onCancel()">Cancel</button>
+        <button type="button" mat-raised-button color="primary" (click)="onConfirm()">{{ data.confirmTxt || 'Yes, Confirm' }}</button>&nbsp;
+			</div>
+		</div>
+	</div>
+</div>
